@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+ 
+
+.todo {
+  margin-bottom: 1rem;
+}
+
+.todo label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgb(253, 248, 248);
+
+}
+
+.icons {
+  margin-left: auto;
+  display: flex;
+}
+
+.icons i {
+ padding-right: 2rem;
+ cursor: pointer;
+}
+
+.format {
+  margin-bottom: 20px;
+}

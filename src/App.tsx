@@ -1,24 +1,73 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {TodoForm} from './components/TodoForm'
+import {TodoList} from './components/TodoList'
 
-function App() {
+
+ export type ITodo = {
+  title: string | undefined 
+  id: number
+  completed: boolean
+}
+
+const App: React.FC = () => {
+  const [todos, setTodos] = React.useState<ITodo[]>([])
+
+  React.useEffect(() => {
+     const res = JSON.parse(localStorage.getItem('todos') || '[]') as ITodo[]
+      setTodos(res)
+  }, [])
+
+  React.useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos])
+
+
+const addHandler = (title: string) => {
+   const newTodo =  {
+     title: title,
+     id: Date.now(),
+     completed: false
+  }
+  setTodos(prev => [newTodo, ...prev])
+}
+
+const togleHandler = (id: number) => {
+   setTodos(prev =>
+     prev.map(todo => {
+       if(todo.id === id){
+         todo.completed = !todo.completed
+       }
+       return todo
+     })
+    )
+}
+
+const removeHandler = (id: number) => {
+   setTodos(prev => prev.filter(todo => todo.id !== id))
+}
+
+const editTask = (id: number) => {
+  const task = prompt('Edit Task')
+  setTodos(prev =>
+    prev.map(todo => {
+      if(todo.id === id){
+        todo.title = task?.toString()
+      }
+      return todo
+    })
+   )
+}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h3>Test Elecctro</h3>
+        <TodoForm add={addHandler}/>
+        <TodoList 
+          todos={todos} 
+          onToggle={togleHandler} 
+          onRemove={removeHandler}
+          onEdit={editTask}
+      />
     </div>
   );
 }
